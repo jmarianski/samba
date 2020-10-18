@@ -1,16 +1,11 @@
-image: dperson/samba:latest
+image: jmarianski/samba:latest
 manifests:
-  - image: dperson/samba:amd64
+  - image: jmarianski/samba:amd64
     platform:
       architecture: amd64
       os: linux
-  - image: dperson/samba:aarch64
+  - image: jmarianski/samba:arm32v7
     platform:
-      architecture: arm64
+      architecture: arm32
       os: linux
-      variant: v8
-  - image: dperson/samba:armhf
-    platform:
-      architecture: arm
-      os: linux
-      variant: v6
+      variant: v7

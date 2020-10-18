@@ -1,4 +1,4 @@
-FROM amd64/ubuntu:14.04
+FROM arm32v7/ubuntu:14.04
 
 MAINTAINER Jacek Marianski <marianski.jacek@gmail.com>
 # see: dperson/samba
