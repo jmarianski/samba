@@ -1,12 +1,12 @@
-FROM krallin/ubuntu-tini:trusty
+FROM arm32v7/ubuntu:14.04
 
 MAINTAINER Jacek Marianski <marianski.jacek@gmail.com>
 # see: dperson/samba
 
 # Install samba
-RUN apt-get update && \
-    apt-get install -yq bash samba tini tzdata && \
-    addgroup --system smb && \
+RUN apt-get clean && apt-get update && apt-get install -y  bash samba tzdata
+    
+RUN addgroup --system smb && \
     adduser --system -D -H -h /tmp -s /sbin/nologin -G smb -g 'Samba User' smbuser &&\
     file="/etc/samba/smb.conf" && \
     sed -i 's|^;* *\(log file = \).*|   \1/dev/stdout|' $file && \
@@ -67,4 +67,4 @@ HEALTHCHECK --interval=60s --timeout=15s \
 VOLUME ["/etc", "/var/cache/samba", "/var/lib/samba", "/var/log/samba",\
             "/run/samba"]
 
-ENTRYPOINT ["/usr/local/bin/tini", "--", "/usr/bin/samba.sh"]
+ENTRYPOINT ["/bin/bash", "-c", "/usr/bin/samba.sh"]
