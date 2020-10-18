@@ -1,11 +1,13 @@
-FROM alpine
-MAINTAINER David Personette <dperson@gmail.com>
+FROM krallin/ubuntu-tini:trusty
+
+MAINTAINER Jacek Marianski <marianski.jacek@gmail.com>
+# see: dperson/samba
 
 # Install samba
-RUN apk --no-cache --no-progress upgrade && \
-    apk --no-cache --no-progress add bash samba shadow tini tzdata && \
-    addgroup -S smb && \
-    adduser -S -D -H -h /tmp -s /sbin/nologin -G smb -g 'Samba User' smbuser &&\
+RUN apt-get update && \
+    apt-get install -yq bash samba tini tzdata && \
+    addgroup --system smb && \
+    adduser --system -D -H -h /tmp -s /sbin/nologin -G smb -g 'Samba User' smbuser &&\
     file="/etc/samba/smb.conf" && \
     sed -i 's|^;* *\(log file = \).*|   \1/dev/stdout|' $file && \
     sed -i 's|^;* *\(load printers = \).*|   \1no|' $file && \
