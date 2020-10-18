@@ -1,10 +1,19 @@
+FROM alpine AS builder
+
+# Download QEMU, see https://github.com/docker/hub-feedback/issues/1261
+ENV QEMU_URL https://github.com/balena-io/qemu/releases/download/v3.0.0%2Bresin/qemu-3.0.0+resin-arm.tar.gz
+RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . --strip-components 1
+
 FROM arm32v7/ubuntu:14.04
+
+COPY --from=builder qemu-arm-static /usr/bin
 
 MAINTAINER Jacek Marianski <marianski.jacek@gmail.com>
 # see: dperson/samba
 
 # Install samba
-RUN apt-get clean && apt-get update && apt-get install -y  bash samba tzdata
+RUN apt-get update
+RUN apt-get update && apt-get install -y  bash samba tzdata
     
 RUN addgroup --system smb && \
     adduser --system -D -H -h /tmp -s /sbin/nologin -G smb -g 'Samba User' smbuser &&\
